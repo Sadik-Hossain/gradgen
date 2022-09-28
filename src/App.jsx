@@ -1,9 +1,16 @@
-import { useState, useRef } from "react";
+import chroma from "chroma-js";
+import { useState, useRef, useEffect } from "react";
 import { FiExternalLink } from "react-icons/fi";
 import "./App.css";
 function App() {
   const [color1, setColor1] = useState("red");
   const [color2, setColor2] = useState("blue");
+  const [error, setError] = useState("");
+  const [direction, setDirection] = useState("linear-gradient");
+  const [generated1, setGenerated1] = useState("");
+  const [generated2, setGenerated2] = useState("");
+  const [generated3, setGenerated3] = useState("");
+  const [orientation, setOrientation] = useState("to right bottom");
   const input1 = useRef(color1);
   const input2 = useRef(color2);
   const inputColor1 = { background: color1 };
@@ -13,9 +20,60 @@ function App() {
     setColor1(input1.current.value);
     setColor2(input2.current.value);
   }
+
+  useEffect(() => {
+    generateColors();
+  });
+  const generateColors = function () {
+    if (chroma.valid(color1) && chroma.valid(color2)) {
+      let colorSplit = chroma.scale([color1, color2]).mode("lch").colors(5);
+      console.log(colorSplit);
+      setGenerated1(colorSplit[1]);
+      setGenerated2(colorSplit[2]);
+      setGenerated3(colorSplit[3]);
+      setError("");
+    } else {
+      setError("Color are no valid.");
+    }
+  };
+  const cssCode =
+    direction +
+    "(" +
+    orientation +
+    "," +
+    color1 +
+    "," +
+    generated1 +
+    "," +
+    generated2 +
+    "," +
+    generated3 +
+    "," +
+    color2 +
+    ");";
+  const grad = {
+    backgroundImage:
+      direction +
+      "(" +
+      orientation +
+      "," +
+      color1 +
+      "," +
+      generated1 +
+      "," +
+      generated2 +
+      "," +
+      generated3 +
+      "," +
+      color2 +
+      ")",
+  };
   return (
     <>
-      <div className="flex  bg-gray-100 justify-center  h-screen inset-0 px-10">
+      <div
+        className="flex  bg-gray-100 justify-center  h-screen inset-0 px-10"
+        style={grad}
+      >
         <div className="px-4 py-6">
           <h1 className="md:text-xl  text-black font-extrabold text-center text-2xl my-10">
             A mini project by
@@ -32,6 +90,9 @@ function App() {
           <h2 className="text-xl text-black text-center py-3 mt-5 font-semibold">
             Enter Colors and press Enter.
           </h2>
+          <div className=" text-center py-2 rounded mb-3  text-white w-40 mx-auto">
+            <h2 className="bg-amber-700">{error}</h2>
+          </div>
           {/* 
         //* taking input
         */}
@@ -59,6 +120,16 @@ function App() {
                 onClick={(e) => onSubmit(e)}
               />
             </form>
+          </div>
+          <div className="box md:w-[640px] w-[350px] h-auto mx-auto break-all mt-4 p-2 ">
+            {error ? (
+              ""
+            ) : (
+              <p className="p-3 text-gray-200 font-mono text-base md:text-xl text-center font-semibold">
+                <span className="text-gray-100">background-image: </span>
+                {cssCode}
+              </p>
+            )}
           </div>
         </div>
       </div>
