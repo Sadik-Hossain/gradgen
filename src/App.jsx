@@ -3,8 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import { FiExternalLink } from "react-icons/fi";
 import "./App.css";
 function App() {
-  const [color1, setColor1] = useState("red");
-  const [color2, setColor2] = useState("blue");
+  const [color1, setColor1] = useState("purple");
+  const [color2, setColor2] = useState("orange");
   const [error, setError] = useState("");
   const [direction, setDirection] = useState("linear-gradient");
   const [generated1, setGenerated1] = useState("");
@@ -26,10 +26,19 @@ function App() {
   useEffect(() => {
     generateColors();
   });
+  const changeOrientation = function (ori) {
+    if (ori === "circle") {
+      setDirection("radial-gradient");
+      setOrientation(ori);
+    } else {
+      setDirection("linear-gradient");
+      setOrientation(ori);
+    }
+  };
+
   const generateColors = function () {
     if (chroma.valid(color1) && chroma.valid(color2)) {
       let colorSplit = chroma.scale([color1, color2]).mode("lch").colors(5);
-      console.log(colorSplit);
       setGenerated1(colorSplit[1]);
       setGenerated2(colorSplit[2]);
       setGenerated3(colorSplit[3]);
@@ -99,11 +108,87 @@ function App() {
           <h1 className="md:text-5xl text-black font-extrabold text-center text-2xl">
             <span className="text-grad ">GradGen:</span> Generate Gradient
           </h1>
+          <h2 className="text-xl text-white text-center py-3 mt-2">
+            Choose orientation
+          </h2>
+
+          <div className="flex items-center justify-center p-2 gap-2 flex-wrap md:gap-5">
+            <button
+              title="to top"
+              className="bg-white  rounded px-2 font-semibold"
+              onClick={() => changeOrientation("to top")}
+            >
+              to top
+            </button>
+
+            <button
+              title="to right top"
+              className="bg-white  rounded px-2 font-semibold"
+              onClick={() => changeOrientation("to right top")}
+            >
+              to right top
+            </button>
+
+            <button
+              title="to right"
+              className="bg-white  rounded px-2 font-semibold"
+              onClick={() => changeOrientation("to right")}
+            >
+              to right
+            </button>
+
+            <button
+              title="to right bottom"
+              className="bg-white  rounded px-2 font-semibold"
+              onClick={() => changeOrientation("to right bottom")}
+            >
+              to right bottom
+            </button>
+
+            <button
+              title="to bottom"
+              className="bg-white  rounded px-2 font-semibold"
+              onClick={() => changeOrientation("to bottom")}
+            >
+              to bottom
+            </button>
+
+            <button
+              title="to bottom left"
+              className="bg-white  rounded px-2 font-semibold"
+              onClick={() => changeOrientation("to bottom left")}
+            >
+              bottom left
+            </button>
+
+            <button
+              title="to left"
+              className="bg-white  rounded px-2 font-semibold"
+              onClick={() => changeOrientation("to left")}
+            >
+              left
+            </button>
+
+            <button
+              title="to left top"
+              className="bg-white  rounded px-2 font-semibold"
+              onClick={() => changeOrientation("to left top")}
+            >
+              left top
+            </button>
+
+            <button
+              className="bg-white  rounded px-2 font-semibold"
+              onClick={() => changeOrientation("circle")}
+            >
+              radial
+            </button>
+          </div>
           <h2 className="text-xl text-black text-center py-3 mt-5 font-semibold">
             Enter Colors and press Enter.
           </h2>
           <div className=" text-center py-2 rounded mb-3  text-white w-40 mx-auto">
-            <h2 className="bg-amber-700">{error}</h2>
+            <h2 className="bg-red-400">{error}</h2>
           </div>
           {/* 
         //* taking input
