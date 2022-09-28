@@ -222,7 +222,7 @@ function App() {
             {error ? (
               ""
             ) : (
-              <p className="p-3 text-gray-200 font-mono text-base md:text-xl text-center font-semibold">
+              <p className="p-3 text-gray-200 font-mono text-base md:text-xl text-center font-semibold bg-black">
                 <span className="text-gray-100">background-image: </span>
                 {cssCode}
               </p>
