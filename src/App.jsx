@@ -11,10 +11,12 @@ function App() {
   const [generated2, setGenerated2] = useState("");
   const [generated3, setGenerated3] = useState("");
   const [orientation, setOrientation] = useState("to right bottom");
+  const [invertedcolor1, setinvertedColor1] = useState("");
+  const [invertedcolor2, setinvertedColor2] = useState("");
   const input1 = useRef(color1);
   const input2 = useRef(color2);
-  const inputColor1 = { background: color1 };
-  const inputColor2 = { background: color2 };
+  const inputColor1 = { background: color1, color: invertedcolor1 };
+  const inputColor2 = { background: color2, color: invertedcolor2 };
   function onSubmit(e) {
     e.preventDefault();
     setColor1(input1.current.value);
@@ -32,10 +34,20 @@ function App() {
       setGenerated2(colorSplit[2]);
       setGenerated3(colorSplit[3]);
       setError("");
+      setinvertedColor1(checkContrast(color1));
+      setinvertedColor2(checkContrast(color2));
     } else {
       setError("Color are no valid.");
     }
   };
+  function checkContrast(color) {
+    const contrast = chroma(color).luminance();
+    if (contrast > 0.6) {
+      return "#000";
+    } else {
+      return "#fff";
+    }
+  }
   const cssCode =
     direction +
     "(" +
